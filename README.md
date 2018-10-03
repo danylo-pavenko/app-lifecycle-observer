@@ -1,7 +1,13 @@
 ## App lifecycle observer
--
 
 Lib for add handlers of Lifecycle your app. Can add logic for method of pause app, resume app, start or close your app.
+
+### Features
+- Handle of app states.
+- Add several listeners.
+- Handle lock/unlock resume app states.
+- Simple implementation.
+
 
 ### Quick start
 1. Implement dependency:
@@ -11,7 +17,7 @@ dependencies {
     implementation "com.gitub.Daniil-Pavenko:app-lifecycle-observer:<latest version>"
 }
 ```
-actual version: [version link]
+Latest version: [![](https://jitpack.io/v/Daniil-Pavenko/app-lifecycle-observer.svg)](https://jitpack.io/#Daniil-Pavenko/app-lifecycle-observer)
 
 2. Call init method of `AppLifecycleObserver.init()` in your `Application` class.
 
@@ -25,17 +31,20 @@ class MyApp : Application {
 }
 ```
 
-3. Add listener as Adapter, use method `AppLifecycleObserver.instance?.addAppLifecycleListener`.
+3. Add listener as Adapter, use extension method `AppLifecycleObserver.instance?.addAppLifecycleListener`.
 
 ```
 fun setupListeners() {
         AppLifecycleObserver.instance?.addAppLifecycleListener {
             onAppStart { Log.d(TAG, "onAppStart") }
-            onAppResumed { Log.d(TAG, "onAppResumed") }
-            onAppPaused { Log.d(TAG, "onAppPaused") }
+            onAppResumed { activity, byUnlocked -> Log.d(TAG, "onAppResumed") }
+            onAppPaused { activity, byLocked -> Log.d(TAG, "onAppPaused") }
             onAppClose { Log.d(TAG, "onAppClose") }
         }
     }
 ```
 
 #### End
+
+// key words:
+android, handle app states, handle app lifecycle

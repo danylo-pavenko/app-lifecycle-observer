@@ -10,6 +10,16 @@ import android.os.Bundle
 import com.dansdev.libapplifecycleobserver.listener.AppLifecycleListener
 import com.dansdev.libapplifecycleobserver.receiver.OnLockScreenReceiver
 
+/**
+ * Observer of app states.
+ *
+ * Handle state: app START, RESUME, PAUSE, STOP.
+ *
+ * Add listener @see [AppLifecycleListener]
+ * Add adapter for handle only selected method @see [com.dansdev.libapplifecycleobserver.listener.AppLifecycleAdapter]
+ *
+ * First need to call @see [AppLifecycleObserver.init]
+ */
 class AppLifecycleObserver : Application.ActivityLifecycleCallbacks, ComponentCallbacks2 {
 
     companion object {
@@ -39,7 +49,12 @@ class AppLifecycleObserver : Application.ActivityLifecycleCallbacks, ComponentCa
     }
 
     fun addListener(lifecycleListener: AppLifecycleListener) {
+        if (app == null) throw IllegalStateException("First need to call init(), and after that add listeners")
         lifecycleListeners.add(lifecycleListener)
+    }
+
+    fun removeAllListeners() {
+        lifecycleListeners.clear()
     }
 
     override fun onActivityPaused(activity: Activity?) {
