@@ -49,14 +49,14 @@ class AppLifecycleObserver : Application.ActivityLifecycleCallbacks, ComponentCa
     override fun onTrimMemory(level: Int) {
         if (level == ComponentCallbacks2.TRIM_MEMORY_UI_HIDDEN && !isLastActivityFinished) {
             isPaused = true
-            lifecycleListeners.forEach { it.onAppPaused(false) }
+            lifecycleListeners.forEach { it.onAppPaused(null, false) }
         }
     }
 
     override fun onActivityResumed(activity: Activity?) {
         activity?.let { _ ->
             if (isPaused) {
-                lifecycleListeners.forEach { it.onAppResumed(false) }
+                lifecycleListeners.forEach { it.onAppResumed(activity, false) }
                 isPaused = false
             }
         }

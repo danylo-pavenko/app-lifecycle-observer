@@ -14,11 +14,11 @@ class OnLockScreenReceiver(private val lifecycleListeners: List<AppLifecycleList
             when (data.action) {
                 Intent.ACTION_SCREEN_OFF -> {
                     isLocked = true
-                    lifecycleListeners.forEach { it.onAppPaused(true) }
+                    lifecycleListeners.forEach { it.onAppPaused(null, true) }
                 }
                 Intent.ACTION_USER_PRESENT -> {
                     if (isLocked) {
-                        lifecycleListeners.forEach { it.onAppResumed(true) }
+                        lifecycleListeners.forEach { it.onAppResumed(null, true) }
                     }
                 }
             }
