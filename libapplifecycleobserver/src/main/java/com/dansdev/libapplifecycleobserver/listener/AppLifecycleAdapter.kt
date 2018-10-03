@@ -1,23 +1,24 @@
 package com.dansdev.libapplifecycleobserver.listener
 
+import android.app.Activity
 import com.dansdev.libapplifecycleobserver.AppLifecycleObserver
 
 class AppLifecycleAdapter : AppLifecycleListener {
 
     private var _appStartListener: (() -> Unit)? = null
-    private var _appPausedListener: ((Boolean) -> Unit)? = null
-    private var _appResumedListener: ((Boolean) -> Unit)? = null
+    private var _appPausedListener: ((Activity?, Boolean) -> Unit)? = null
+    private var _appResumedListener: ((Activity?, Boolean) -> Unit)? = null
     private var _appCloseListener: (() -> Unit)? = null
 
     fun onAppStart(appStartListener: () -> Unit) {
         this._appStartListener = appStartListener
     }
 
-    fun onAppPaused(appPaused: (Boolean) -> Unit) {
+    fun onAppPaused(appPaused: (Activity?, Boolean) -> Unit) {
         this._appPausedListener = appPaused
     }
 
-    fun onAppResumed(appResumed: (Boolean) -> Unit) {
+    fun onAppResumed(appResumed: (Activity?, Boolean) -> Unit) {
         this._appResumedListener = appResumed
     }
 
@@ -29,12 +30,12 @@ class AppLifecycleAdapter : AppLifecycleListener {
         _appStartListener?.invoke()
     }
 
-    override fun onAppPaused(byLocked: Boolean) {
-        _appPausedListener?.invoke(byLocked)
+    override fun onAppPaused(activity: Activity?, byLocked: Boolean) {
+        _appPausedListener?.invoke(activity, byLocked)
     }
 
-    override fun onAppResumed(byUnlocked: Boolean) {
-        _appResumedListener?.invoke(byUnlocked)
+    override fun onAppResumed(activity: Activity?, byUnlocked: Boolean) {
+        _appResumedListener?.invoke(activity, byUnlocked)
     }
 
     override fun onAppClose() {

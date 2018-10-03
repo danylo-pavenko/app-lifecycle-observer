@@ -20,11 +20,22 @@ class MyApp : Application {
 
   override fun onCreate(){
     super.onCreate()
-    AppLifecycleObserver.init(this) {
-      ...
-    }
+    AppLifecycleObserver.instance?.init(this)
   }
 }
+```
+
+3. Add listener as Adapter, use method `AppLifecycleObserver.instance?.addAppLifecycleListener`.
+
+```
+fun setupListeners() {
+        AppLifecycleObserver.instance?.addAppLifecycleListener {
+            onAppStart { Log.d(TAG, "onAppStart") }
+            onAppResumed { Log.d(TAG, "onAppResumed") }
+            onAppPaused { Log.d(TAG, "onAppPaused") }
+            onAppClose { Log.d(TAG, "onAppClose") }
+        }
+    }
 ```
 
 #### End
