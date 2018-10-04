@@ -10,8 +10,18 @@ Lib for add handlers of Lifecycle your app. Can add logic for method of pause ap
 
 
 ### Quick start
-1. Implement dependency:
+1. Implement **gradle** dependency:
 
+> add repositories:
+```
+buildscript {
+    repositories {
+        ...
+        maven { url "https://jitpack.io" }
+    }
+}```
+
+> add implementation 
 ```
 dependencies {
     implementation "com.gitub.Daniil-Pavenko:app-lifecycle-observer:<latest version>"
