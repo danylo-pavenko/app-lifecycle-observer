@@ -19,9 +19,10 @@ buildscript {
         ...
         maven { url "https://jitpack.io" }
     }
-}```
+}
+```
 
-> add implementation 
+> add implementation
 ```
 dependencies {
     implementation "com.gitub.Daniil-Pavenko:app-lifecycle-observer:<latest version>"
