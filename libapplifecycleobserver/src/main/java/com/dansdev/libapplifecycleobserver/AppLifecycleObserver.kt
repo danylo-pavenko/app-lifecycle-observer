@@ -112,7 +112,15 @@ class AppLifecycleObserver : Application.ActivityLifecycleCallbacks, ComponentCa
     }
 
     private fun unregisterLockReceiver() {
-        lockScreenReceiver?.let { app?.unregisterReceiver(it) }
+        lockScreenReceiver?.let {
+            try {
+                app?.unregisterReceiver(it)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            } finally {
+                lockScreenReceiver = null
+            }
+        }
     }
 
     override fun onActivityStopped(activity: Activity?) {

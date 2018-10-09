@@ -1,11 +1,10 @@
 ## App lifecycle observer
 
-Lib for add handlers of Lifecycle your app. Can add logic for method of pause app, resume app, start or close your app.
+Lib adds lifecycle observer for your app. Can add logic for method of pause app, resume app, start or close your app.
 
 ### Features
-- Handle of app states.
+- Handle of app states (onStartApp, onCloseApp, onPauseApp, onResumeApp).
 - Add several listeners.
-- Handle lock/unlock resume app states.
 - Simple implementation.
 
 
