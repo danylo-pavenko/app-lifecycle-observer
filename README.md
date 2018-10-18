@@ -3,7 +3,7 @@
 Lib adds lifecycle observer for your app. Can add logic for method of pause app, resume app, start or close your app.
 
 ### Features
-- Handle of app states (onStartApp, onCloseApp, onPauseApp, onResumeApp).
+- Handle of app states (onStartApp, onCloseApp, onPauseApp, onResumeApp, onAppConfigurationChanged).
 - Add several listeners.
 - Simple implementation.
 
@@ -50,6 +50,7 @@ fun setupListeners() {
             onAppResumed { activity, byUnlocked -> Log.d(TAG, "onAppResumed") }
             onAppPaused { activity, byLocked -> Log.d(TAG, "onAppPaused") }
             onAppClose { Log.d(TAG, "onAppClose") }
+            onAppConfigurationChanged { configuration -> Log.d(TAG, "onAppConfigurationChanged") }
         }
     }
 ```
@@ -57,4 +58,4 @@ fun setupListeners() {
 #### End
 
 // key words:
-android, handle app states, handle app lifecycle
+android, handle app states, handle app lifecycle, app close, app resume, app stop, app configuration changed

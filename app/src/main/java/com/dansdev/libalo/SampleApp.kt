@@ -23,6 +23,7 @@ class SampleApp : Application() {
             onAppResumed { _, _ -> Log.d(TAG, "onAppResumed") }
             onAppPaused { _, _ -> Log.d(TAG, "onAppPaused") }
             onAppClose { Log.d(TAG, "onAppClose") }
+            onAppConfigurationChanged { configuration -> Log.d(TAG, "onAppConfigurationChanged") }
         }
     }
 }

@@ -133,6 +133,7 @@ class AppLifecycleObserver : Application.ActivityLifecycleCallbacks, ComponentCa
     }
 
     override fun onConfigurationChanged(newConfig: Configuration?) {
+        lifecycleListeners.forEach { it.onAppConfigurationChanged(newConfig) }
     }
 
     override fun onActivityStarted(activity: Activity?) {

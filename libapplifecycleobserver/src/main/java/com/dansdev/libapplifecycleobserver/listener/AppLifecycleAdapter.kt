@@ -1,6 +1,7 @@
 package com.dansdev.libapplifecycleobserver.listener
 
 import android.app.Activity
+import android.content.res.Configuration
 import com.dansdev.libapplifecycleobserver.AppLifecycleObserver
 
 class AppLifecycleAdapter : AppLifecycleListener {
@@ -9,6 +10,7 @@ class AppLifecycleAdapter : AppLifecycleListener {
     private var _appPausedListener: ((Activity?, Boolean) -> Unit)? = null
     private var _appResumedListener: ((Activity?, Boolean) -> Unit)? = null
     private var _appCloseListener: (() -> Unit)? = null
+    private var _appConfigurationChangedListener: ((Configuration?) -> Unit)? = null
 
     fun onAppStart(appStartListener: () -> Unit) {
         this._appStartListener = appStartListener
@@ -26,6 +28,10 @@ class AppLifecycleAdapter : AppLifecycleListener {
         this._appCloseListener = appClose
     }
 
+    fun onAppConfigurationChanged(appConfigurationChangedListener: (Configuration?) -> Unit) {
+        this._appConfigurationChangedListener = appConfigurationChangedListener
+    }
+
     override fun onAppStart() {
         _appStartListener?.invoke()
     }
@@ -40,6 +46,9 @@ class AppLifecycleAdapter : AppLifecycleListener {
 
     override fun onAppClose() {
         _appCloseListener?.invoke()
+    }
+    override fun onAppConfigurationChanged(newConfig: Configuration?) {
+        _appConfigurationChangedListener?.invoke(newConfig)
     }
 }
 
