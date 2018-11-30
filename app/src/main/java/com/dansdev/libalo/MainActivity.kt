@@ -1,14 +1,12 @@
 package com.dansdev.libalo
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import com.dansdev.libapplifecycleobserver.AppLifecycleObserver
 import com.dansdev.libapplifecycleobserver.listener.addAppLifecycleListener
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
-
-    private val logData = mutableListOf<String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,13 +25,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun addLog(log: String) {
-        logData.add(log)
-        printLog()
-    }
-
-    private fun printLog() {
-        var data = ""
-        logData.forEach { data += "$it\n" }
-        tv_log.text = data
+        val lastActivity = AppLifecycleObserver.instance?.lastOpenedActivity()
+        tv_log.append("$log -> ${lastActivity?.javaClass?.simpleName}\n")
     }
 }

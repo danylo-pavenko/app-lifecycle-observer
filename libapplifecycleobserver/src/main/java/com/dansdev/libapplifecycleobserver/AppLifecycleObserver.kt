@@ -1,5 +1,6 @@
 package com.dansdev.libapplifecycleobserver
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Application
 import android.content.ComponentCallbacks2
@@ -23,6 +24,7 @@ import com.dansdev.libapplifecycleobserver.receiver.OnLockScreenReceiver
 class AppLifecycleObserver : Application.ActivityLifecycleCallbacks, ComponentCallbacks2 {
 
     companion object {
+        @SuppressLint("StaticFieldLeak")
         var instance: AppLifecycleObserver? = null
             get() {
                 if (field == null) {
@@ -41,6 +43,7 @@ class AppLifecycleObserver : Application.ActivityLifecycleCallbacks, ComponentCa
     private var isPaused = false
     private var isLastActivityFinished = false
     private var lockScreenReceiver: OnLockScreenReceiver? = null
+    private var currentActivity: Activity? = null
 
     fun init(app: Application) {
         this.app = app
@@ -57,6 +60,8 @@ class AppLifecycleObserver : Application.ActivityLifecycleCallbacks, ComponentCa
         lifecycleListeners.clear()
     }
 
+    fun lastOpenedActivity(): Activity? = currentActivity
+
     override fun onActivityPaused(activity: Activity?) {
         activity?.let { isLastActivityFinished = it.isFinishing }
     }
@@ -69,8 +74,9 @@ class AppLifecycleObserver : Application.ActivityLifecycleCallbacks, ComponentCa
     }
 
     override fun onActivityResumed(activity: Activity?) {
-        activity?.let { _ ->
+        activity?.let {
             if (isPaused) {
+                currentActivity = it
                 lifecycleListeners.forEach { it.onAppResumed(activity, false) }
                 isPaused = false
             }
@@ -84,7 +90,10 @@ class AppLifecycleObserver : Application.ActivityLifecycleCallbacks, ComponentCa
 
     override fun onActivityCreated(activity: Activity?, savedInstanceState: Bundle?) {
         handleAppIsCreated()
-        activity?.let { activities.add(activity.javaClass.simpleName) }
+        activity?.let {
+            currentActivity = it
+            activities.add(activity.javaClass.simpleName)
+        }
         handleChangeActivities()
     }
 
@@ -106,6 +115,7 @@ class AppLifecycleObserver : Application.ActivityLifecycleCallbacks, ComponentCa
 
     private fun handleChangeActivities() {
         if (activities.isEmpty()) {
+            currentActivity = null
             lifecycleListeners.forEach { it.onAppClose() }
             unregisterLockReceiver()
         }
@@ -138,4 +148,6 @@ class AppLifecycleObserver : Application.ActivityLifecycleCallbacks, ComponentCa
 
     override fun onActivityStarted(activity: Activity?) {
     }
+
+
 }
