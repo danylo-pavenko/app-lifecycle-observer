@@ -75,8 +75,8 @@ class AppLifecycleObserver : Application.ActivityLifecycleCallbacks, ComponentCa
 
     override fun onActivityResumed(activity: Activity?) {
         activity?.let {
+            currentActivity = it
             if (isPaused) {
-                currentActivity = it
                 lifecycleListeners.forEach { it.onAppResumed(activity, false) }
                 isPaused = false
             }
