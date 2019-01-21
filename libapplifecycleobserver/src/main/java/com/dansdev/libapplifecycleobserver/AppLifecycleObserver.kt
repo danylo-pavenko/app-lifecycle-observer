@@ -74,8 +74,8 @@ class AppLifecycleObserver : Application.ActivityLifecycleCallbacks, ComponentCa
     }
 
     override fun onActivityResumed(activity: Activity?) {
-        activity?.let {
-            currentActivity = it
+        activity?.let { activity ->
+            currentActivity = activity
             if (isPaused) {
                 lifecycleListeners.forEach { it.onAppResumed(activity, false) }
                 isPaused = false
@@ -109,7 +109,7 @@ class AppLifecycleObserver : Application.ActivityLifecycleCallbacks, ComponentCa
         intentFilter.addAction(Intent.ACTION_USER_PRESENT)
 
         unregisterLockReceiver()
-        lockScreenReceiver = OnLockScreenReceiver(lifecycleListeners)
+        lockScreenReceiver = OnLockScreenReceiver(lifecycleListeners) { isPaused }
         app?.registerReceiver(lockScreenReceiver, intentFilter)
     }
 

@@ -19,6 +19,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupAppLifecycleListener() {
+        AppLifecycleObserver.instance?.removeAllListeners()
         AppLifecycleObserver.instance?.addAppLifecycleListener {
             onAppStart { addLog("onAppStart") }
             onAppResumed { _, _ -> addLog("onAppResumed") }
@@ -35,6 +36,7 @@ class MainActivity : AppCompatActivity() {
     private fun addLog(log: String) {
         val lastActivity = AppLifecycleObserver.instance?.lastOpenedActivity()
         tv_log.append("$log -> ${lastActivity?.javaClass?.simpleName}\n")
+        Log.d(javaClass.simpleName, log)
     }
 
     fun onOpenSecondActivity(v: View) {
