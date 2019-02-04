@@ -18,7 +18,7 @@ class SampleApp : Application() {
     }
 
     private fun setupListeners() {
-        AppLifecycleObserver.instance?.addAppLifecycleListener {
+        AppLifecycleObserver.instance?.addAppLifecycleListener("SampleApp") {
             onAppStart { Log.d(TAG, "onAppStart") }
             onAppResumed { _, _ -> Log.d(TAG, "onAppResumed") }
             onAppPaused { _, _ -> Log.d(TAG, "onAppPaused") }

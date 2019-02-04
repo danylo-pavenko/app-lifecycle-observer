@@ -41,11 +41,11 @@ class MyApp : Application {
 }
 ```
 
-3. Add listener as Adapter, use extension method `AppLifecycleObserver.instance?.addAppLifecycleListener`.
+3. Add listener as Adapter, use extension method `AppLifecycleObserver.instance.addAppLifecycleListener`.
 
 ```
 fun setupListeners() {
-        AppLifecycleObserver.instance?.addAppLifecycleListener {
+        AppLifecycleObserver.instance.addAppLifecycleListener("tag_listener") {
             onAppStart { Log.d(TAG, "onAppStart") }
             onAppResumed { activity, byUnlocked -> Log.d(TAG, "onAppResumed") }
             onAppPaused { activity, byLocked -> Log.d(TAG, "onAppPaused") }
@@ -56,6 +56,12 @@ fun setupListeners() {
 ```
 
 #### End
+
+Remove listeners
+```
+AppLifecycleObserver.instance.removeAllListeners() // remove all registered listeners
+AppLifecycleObserver.instance.removeListener("tag_listener") // remove selected by tag of listener
+```
 
 // key words:
 android, handle app states, handle app lifecycle, app close, app resume, app stop, app configuration changed

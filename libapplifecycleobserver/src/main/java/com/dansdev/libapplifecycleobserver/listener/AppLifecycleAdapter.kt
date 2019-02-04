@@ -52,8 +52,8 @@ class AppLifecycleAdapter : AppLifecycleListener {
     }
 }
 
-fun AppLifecycleObserver.addAppLifecycleListener(func: AppLifecycleAdapter.() -> Unit) {
+fun AppLifecycleObserver.addAppLifecycleListener(tag: String, func: AppLifecycleAdapter.() -> Unit) {
     val listener = AppLifecycleAdapter()
     listener.func()
-    addListener(listener)
+    addListener(tag, listener)
 }

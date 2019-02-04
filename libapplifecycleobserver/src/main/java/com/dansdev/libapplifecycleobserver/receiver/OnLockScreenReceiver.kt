@@ -5,8 +5,14 @@ import android.content.Context
 import android.content.Intent
 import com.dansdev.libapplifecycleobserver.listener.AppLifecycleListener
 
-class OnLockScreenReceiver(private val lifecycleListeners: List<AppLifecycleListener>,
+class OnLockScreenReceiver(listeners: List<AppLifecycleListener>,
                            private val onPausedAppByActivity: () -> Boolean) : BroadcastReceiver() {
+
+    val lifecycleListeners = mutableListOf<AppLifecycleListener>()
+
+    init {
+        lifecycleListeners.addAll(listeners)
+    }
 
     private var isLocked = false
 

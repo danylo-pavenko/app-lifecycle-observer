@@ -10,6 +10,7 @@ import android.content.res.Configuration
 import android.os.Bundle
 import com.dansdev.libapplifecycleobserver.listener.AppLifecycleListener
 import com.dansdev.libapplifecycleobserver.receiver.OnLockScreenReceiver
+import java.util.*
 
 /**
  * Observer of app states.
@@ -37,7 +38,7 @@ class AppLifecycleObserver : Application.ActivityLifecycleCallbacks, ComponentCa
 
     private var app: Application? = null
 
-    private val lifecycleListeners = mutableListOf<AppLifecycleListener>()
+    private val lifecycleListeners = WeakHashMap<String, AppLifecycleListener>()
 
     private var activities = mutableListOf<String>()
     private var isPaused = false
@@ -51,9 +52,17 @@ class AppLifecycleObserver : Application.ActivityLifecycleCallbacks, ComponentCa
         app.registerComponentCallbacks(this)
     }
 
-    fun addListener(lifecycleListener: AppLifecycleListener) {
+    fun addListener(tag: String, lifecycleListener: AppLifecycleListener) {
         if (app == null) throw IllegalStateException("First need to call init(), and after that add listeners")
-        lifecycleListeners.add(lifecycleListener)
+        lifecycleListeners[tag] = lifecycleListener
+    }
+
+    fun removeListener(tag: String) {
+        if (lifecycleListeners.containsKey(tag)) {
+            lifecycleListeners.remove(tag)
+        } else {
+            System.out.println("is tag for listener not register")
+        }
     }
 
     fun removeAllListeners() {
@@ -69,7 +78,7 @@ class AppLifecycleObserver : Application.ActivityLifecycleCallbacks, ComponentCa
     override fun onTrimMemory(level: Int) {
         if (level == ComponentCallbacks2.TRIM_MEMORY_UI_HIDDEN && !isLastActivityFinished) {
             isPaused = true
-            lifecycleListeners.forEach { it.onAppPaused(null, false) }
+            lifecycleListeners.values.forEach { it.onAppPaused(null, false) }
         }
     }
 
@@ -77,7 +86,7 @@ class AppLifecycleObserver : Application.ActivityLifecycleCallbacks, ComponentCa
         activity?.let { activity ->
             currentActivity = activity
             if (isPaused) {
-                lifecycleListeners.forEach { it.onAppResumed(activity, false) }
+                lifecycleListeners.values.forEach { it.onAppResumed(activity, false) }
                 isPaused = false
             }
         }
@@ -99,7 +108,7 @@ class AppLifecycleObserver : Application.ActivityLifecycleCallbacks, ComponentCa
 
     private fun handleAppIsCreated() {
         if (activities.isEmpty()) {
-            lifecycleListeners.forEach { it.onAppStart() }
+            lifecycleListeners.values.forEach { it.onAppStart() }
             registerLockReceiver()
         }
     }
@@ -109,14 +118,14 @@ class AppLifecycleObserver : Application.ActivityLifecycleCallbacks, ComponentCa
         intentFilter.addAction(Intent.ACTION_USER_PRESENT)
 
         unregisterLockReceiver()
-        lockScreenReceiver = OnLockScreenReceiver(lifecycleListeners) { isPaused }
+        lockScreenReceiver = OnLockScreenReceiver(lifecycleListeners.values.toList()) { isPaused }
         app?.registerReceiver(lockScreenReceiver, intentFilter)
     }
 
     private fun handleChangeActivities() {
         if (activities.isEmpty()) {
             currentActivity = null
-            lifecycleListeners.forEach { it.onAppClose() }
+            lifecycleListeners.values.forEach { it.onAppClose() }
             unregisterLockReceiver()
         }
     }
@@ -143,7 +152,7 @@ class AppLifecycleObserver : Application.ActivityLifecycleCallbacks, ComponentCa
     }
 
     override fun onConfigurationChanged(newConfig: Configuration?) {
-        lifecycleListeners.forEach { it.onAppConfigurationChanged(newConfig) }
+        lifecycleListeners.values.forEach { it.onAppConfigurationChanged(newConfig) }
     }
 
     override fun onActivityStarted(activity: Activity?) {
