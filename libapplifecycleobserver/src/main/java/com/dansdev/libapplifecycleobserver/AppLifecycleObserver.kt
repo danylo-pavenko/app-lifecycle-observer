@@ -55,6 +55,9 @@ class AppLifecycleObserver : Application.ActivityLifecycleCallbacks, ComponentCa
     fun addListener(tag: String, lifecycleListener: AppLifecycleListener) {
         if (app == null) throw IllegalStateException("First need to call init(), and after that add listeners")
         lifecycleListeners[tag] = lifecycleListener
+        lockScreenReceiver?.let {
+            it.lifecycleListeners[tag] = lifecycleListener
+        }
     }
 
     fun removeListener(tag: String) {
@@ -118,7 +121,7 @@ class AppLifecycleObserver : Application.ActivityLifecycleCallbacks, ComponentCa
         intentFilter.addAction(Intent.ACTION_USER_PRESENT)
 
         unregisterLockReceiver()
-        lockScreenReceiver = OnLockScreenReceiver(lifecycleListeners.values.toList()) { isPaused }
+        lockScreenReceiver = OnLockScreenReceiver(lifecycleListeners) { isPaused }
         app?.registerReceiver(lockScreenReceiver, intentFilter)
     }
 

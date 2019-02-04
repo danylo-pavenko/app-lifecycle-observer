@@ -4,14 +4,17 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import com.dansdev.libapplifecycleobserver.listener.AppLifecycleListener
+import java.util.*
 
-class OnLockScreenReceiver(listeners: List<AppLifecycleListener>,
+class OnLockScreenReceiver(listeners: WeakHashMap<String, AppLifecycleListener>,
                            private val onPausedAppByActivity: () -> Boolean) : BroadcastReceiver() {
 
-    val lifecycleListeners = mutableListOf<AppLifecycleListener>()
+    val lifecycleListeners = WeakHashMap<String, AppLifecycleListener>()
 
     init {
-        lifecycleListeners.addAll(listeners)
+        for ((key, listener) in listeners) {
+            lifecycleListeners[key] = listener
+        }
     }
 
     private var isLocked = false
@@ -22,13 +25,13 @@ class OnLockScreenReceiver(listeners: List<AppLifecycleListener>,
                 Intent.ACTION_SCREEN_OFF -> {
                     if (!onPausedAppByActivity() && !isLocked) {
                         isLocked = true
-                        lifecycleListeners.forEach { it.onAppPaused(null, true) }
+                        lifecycleListeners.values.forEach { it.onAppPaused(null, true) }
                     }
                 }
                 Intent.ACTION_USER_PRESENT -> {
                     if (!onPausedAppByActivity() && isLocked) {
                         isLocked = false
-                        lifecycleListeners.forEach { it.onAppResumed(null, true) }
+                        lifecycleListeners.values.forEach { it.onAppResumed(null, true) }
                     }
                 }
             }
