@@ -63,6 +63,7 @@ class AppLifecycleObserver : Application.ActivityLifecycleCallbacks, ComponentCa
     fun removeListener(tag: String) {
         if (lifecycleListeners.containsKey(tag)) {
             lifecycleListeners.remove(tag)
+            lockScreenReceiver?.lifecycleListeners?.remove(tag)
         } else {
             System.out.println("is tag for listener not register")
         }
@@ -70,6 +71,7 @@ class AppLifecycleObserver : Application.ActivityLifecycleCallbacks, ComponentCa
 
     fun removeAllListeners() {
         lifecycleListeners.clear()
+        lockScreenReceiver?.lifecycleListeners?.clear()
     }
 
     fun lastOpenedActivity(): Activity? = currentActivity
