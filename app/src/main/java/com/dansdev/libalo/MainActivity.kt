@@ -19,7 +19,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupAppLifecycleListener() {
-        AppLifecycleObserver.instance?.addAppLifecycleListener("MainActivity") {
+        AppLifecycleObserver.instance?.addAppLifecycleListener(javaClass.simpleName) {
             onAppStart { addLog("onAppStart") }
             onAppResumed { _, _ -> addLog("onAppResumed") }
             onAppPaused { _, _ -> addLog("onAppPaused") }
