@@ -63,5 +63,8 @@ AppLifecycleObserver.instance.removeAllListeners() // remove all registered list
 AppLifecycleObserver.instance.removeListener("tag_listener") // remove selected by tag of listener
 ```
 
+##### Attention
+If you will add for activity, need to call method `removeListener(tag)`.
+
 // key words:
 android, handle app states, handle app lifecycle, app close, app resume, app stop, app configuration changed
