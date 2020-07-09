@@ -22,9 +22,9 @@ buildscript {
 ```
 
 > add implementation
-```
+```gradle
 dependencies {
-    implementation "com.gitub.Daniil-Pavenko:app-lifecycle-observer:<latest version>"
+    implementation "com.github.Daniil-Pavenko:app-lifecycle-observer:<latest version>"
 }
 ```
 Latest version: [![](https://jitpack.io/v/Daniil-Pavenko/app-lifecycle-observer.svg)](https://jitpack.io/#Daniil-Pavenko/app-lifecycle-observer)
