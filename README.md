@@ -12,7 +12,7 @@ Lib adds lifecycle observer for your app. Can add logic for method of pause app,
 1. Implement **gradle** dependency:
 
 > add repositories:
-```
+```groovy
 buildscript {
     repositories {
         ...
@@ -31,7 +31,7 @@ Latest version: [![](https://jitpack.io/v/Daniil-Pavenko/app-lifecycle-observer.
 
 2. Call init method of `AppLifecycleObserver.init()` in your `Application` class.
 
-```
+```kotlin
 class MyApp : Application {
 
   override fun onCreate(){
@@ -43,7 +43,7 @@ class MyApp : Application {
 
 3. Add listener as Adapter, use extension method `AppLifecycleObserver.instance.addAppLifecycleListener`.
 
-```
+```kotlin
 fun setupListeners() {
         AppLifecycleObserver.instance.addAppLifecycleListener("tag_listener") {
             onAppStart { Log.d(TAG, "onAppStart") }
@@ -58,7 +58,7 @@ fun setupListeners() {
 #### End
 
 Remove listeners
-```
+```kotlin
 AppLifecycleObserver.instance.removeAllListeners() // remove all registered listeners
 AppLifecycleObserver.instance.removeListener("tag_listener") // remove selected by tag of listener
 ```
